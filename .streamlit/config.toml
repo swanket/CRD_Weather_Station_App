@@ -1,5 +1,5 @@
 [server]
 runOnSave = false
 
-[watch]
-enable = false
+[server]
+folderWatchBlacklist = ["venv", "node_modules", ".venv", "__pycache__"]
