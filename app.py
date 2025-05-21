@@ -37,13 +37,13 @@ start_date = st.text_input('And a start date')
 if st.button('Plot'):
     if station_temp:
         df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").execute().data)
-        air_temp = df["value"]
-        time = df["record_ts"]
-        st.write(f'{df.shape}')
+        # air_temp = df["value"]
+        # time = df["record_ts"]
+        # st.write(f'{df.shape}')
         # st.write(df["record_ts","value"][0:10,:])
         # x_axis = st.selectbox("X-Axis", options=numeric_cols)
         # y_axis = st.selectbox("Y-Axis", options=numeric_cols, index=1 if len(numeric_cols) > 1 else 0)
-        fig = px.scatter(x=time,y=air_temp, title=f"Temperature at Station {station_temp}",labels={time:"Timestamp",air_temp:"Air temperature (C)"})
+        fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
         st.plotly_chart(fig)
     else:
         st.error("Pick a station.")
