@@ -35,6 +35,8 @@ if st.button("Show me a Table"):
 
 station_temp = st.text_input("Pick a Station to Plot Air Temperature")
 year = st.text_input('And a starting year')
+if int(year) >= 2005:
+    st.error("Choose a year before 2005.")
 # start_year = datetime(int(year),1,1)
 if st.button('Plot'):
     if station_temp:
