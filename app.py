@@ -26,13 +26,7 @@ from st_supabase_connection import SupabaseConnection
 #     return pl.DataFrame(rows, schema=cols)
 
 conn = st.connection("supabase", type = SupabaseConnection)
-# st_supabase = st.connection(
-#     name="supabase_connection", 
-#     type=SupabaseConnection, 
-#     ttl=None,
-#     url=url, 
-#     key=key, 
-# )
+
 
 st.title("Weather Station Explorer")
 
@@ -47,10 +41,9 @@ if st.button("Filter by Station"):
 
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
-stations = conn.table("stations").select("*").eq("Native ID","FW001").execute()
+stations = conn.table("stations").select("*").execute() # .eq("Native ID","FW001")
 
-# st.write('Hello World!')
-# st.write(f'{rows.data}')
+st.write(f'{stations.data["Native ID"]}')
 
 for row in stations.data:
     st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
