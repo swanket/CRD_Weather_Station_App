@@ -35,11 +35,11 @@ if st.button("Show me a Table"):
 
 station_temp = st.text_input("Pick a Station to Plot Air Temperature")
 year = st.text_input('And a starting year')
-start_year = datetime(int(year),1,1)
+# start_year = datetime(int(year),1,1)
 if st.button('Plot'):
     if station_temp:
         if year:
-            df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").gte("record_ts",start_year.isoformat()).order("record_ts",desc=False).execute().data)
+            df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").gte("record_ts",datetime(int(year),1,1).isoformat()).order("record_ts",desc=False).execute().data)
             # air_temp = df["value"]
             # time = df["record_ts"]
             # st.write(f'{df.shape}')
