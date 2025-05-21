@@ -43,7 +43,7 @@ if st.button("Filter by Station"):
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
 stations = conn.table("stations").select("*").execute() # .eq("Native ID","FW001")
 
-st.write(pl.DataFrame(stations))
+st.write(pl.DataFrame(stations.data))
 
 for row in stations.data:
     st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
