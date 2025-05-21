@@ -43,7 +43,7 @@ if st.button('Plot'):
             if int(year) >= 2005:
                 st.error("Choose a year before 2005.")
             else:
-                df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").gte("record_ts",datetime(int(year),1,1).isoformat()).order("record_ts",desc=False).execute().data)
+                df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id",variable).gte("record_ts",datetime(int(year),1,1).isoformat()).order("record_ts",desc=False).execute().data)
                 # st.write(f'{df.shape}')
                 # st.write(df["record_ts","value"][0:10,:])
                 fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
