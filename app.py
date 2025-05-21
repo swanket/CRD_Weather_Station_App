@@ -25,7 +25,7 @@ from st_supabase_connection import SupabaseConnection
 #     conn.close()
 #     return pl.DataFrame(rows, schema=cols)
 
-conn = st.connection("supabase", type = SupabaseConnection)
+conn = st.connection("db.qlyjuhnwxvltrvwsptnv.supabase.co", type = SupabaseConnection)
 
 st.title("Weather Station Explorer")
 
