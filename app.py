@@ -8,36 +8,10 @@ import plotly.express as px
 from st_supabase_connection import SupabaseConnection
 
 
-# def query_to_polars(query: str) -> pl.DataFrame:
-#     creds = st.secrets["postgres"]
-#     conn = psycopg2.connect(
-#         host=creds["host"],
-#         port=creds["port"],
-#         dbname=creds["dbname"],
-#         user=creds["user"],
-#         password=creds["password"]
-#     )
-#     cur = conn.cursor()
-#     cur.execute(query)
-#     cols = [desc[0] for desc in cur.description]
-#     rows = cur.fetchall()
-#     cur.close()
-#     conn.close()
-#     return pl.DataFrame(rows, schema=cols)
-
 conn = st.connection("supabase", type = SupabaseConnection)
 
 
-st.title("Weather Station Explorer")
-
-# Example: Select station and number of rows
-limit = st.slider("Number of rows", 10, 500, 100)
-station_filter = st.text_input("Filter by station name (optional)")
-if st.button("Filter by Station"):
-    if station_filter:
-        st.success("Filter!")
-    else:
-        st.error("No Filter :(")
+st.title("Capital Region District Weather Station Explorer")
 
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
@@ -50,10 +24,27 @@ if st.button("Show me a Table"):
             st.write(pl.DataFrame(stations.data))
         if table_generator == 'variables':
             st.write(pl.DataFrame(conn.table("variables").select("*").execute().data))
+        if table_generator == 'station_readings':
+            st.write(pl.DataFrame(conn.table("station_readings").select("*").execute().data))
         else:
             st.error("Pick a valid table: stations, variables, readings, or station_readings ")
     else: 
         st.error("Enter a table name: stations, variables, readings, or station_readings")
+
+
+station_temp = st.text_input("Pick a Station to Plot Air Temperature")
+if st.button('Plot'):
+    if station_temp:
+        df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").execute().data)
+        air_temp = df["value"]
+        time = df["record_ts"]
+        st.write(df["record_ts","value"][0:10,:])
+        # x_axis = st.selectbox("X-Axis", options=numeric_cols)
+        # y_axis = st.selectbox("Y-Axis", options=numeric_cols, index=1 if len(numeric_cols) > 1 else 0)
+        # fig = px.scatter(df.to_pandas(), x=x_axis, y=y_axis, title=f"{y_axis} vs {x_axis}")
+        # st.plotly_chart(fig)
+    else:
+        st.error("Pick a station.")
 
 # for row in stations.data:
 #     st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
