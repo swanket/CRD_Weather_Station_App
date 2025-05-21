@@ -33,6 +33,7 @@ if st.button("Show me a Table"):
 
 
 station_temp = st.text_input("Pick a Station to Plot Air Temperature")
+start_date = st.text_input('And a start date')
 if st.button('Plot'):
     if station_temp:
         df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").execute().data)
@@ -42,7 +43,7 @@ if st.button('Plot'):
         # st.write(df["record_ts","value"][0:10,:])
         # x_axis = st.selectbox("X-Axis", options=numeric_cols)
         # y_axis = st.selectbox("Y-Axis", options=numeric_cols, index=1 if len(numeric_cols) > 1 else 0)
-        fig = px.scatter(x=time,y=air_temp, title=f"Temperature at Station {station_temp}")
+        fig = px.scatter(x=time,y=air_temp, title=f"Temperature at Station {station_temp}",labels={time:"Timestamp",air_temp:"Air temperature (C)"})
         st.plotly_chart(fig)
     else:
         st.error("Pick a station.")
