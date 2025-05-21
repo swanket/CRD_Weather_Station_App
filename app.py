@@ -6,6 +6,7 @@ import psycopg2
 import polars as pl
 import plotly.express as px
 from st_supabase_connection import SupabaseConnection
+from datetime import datetime
 
 
 conn = st.connection("supabase", type = SupabaseConnection)
@@ -33,18 +34,22 @@ if st.button("Show me a Table"):
 
 
 station_temp = st.text_input("Pick a Station to Plot Air Temperature")
-start_date = st.text_input('And a start date')
+year = st.text_input('And a starting year')
+start_year = datetime(year,1,1)
 if st.button('Plot'):
     if station_temp:
-        df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").order("record_ts",desc=False).execute().data)
-        # air_temp = df["value"]
-        # time = df["record_ts"]
-        # st.write(f'{df.shape}')
-        # st.write(df["record_ts","value"][0:10,:])
-        # x_axis = st.selectbox("X-Axis", options=numeric_cols)
-        # y_axis = st.selectbox("Y-Axis", options=numeric_cols, index=1 if len(numeric_cols) > 1 else 0)
-        fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
-        st.plotly_chart(fig)
+        if year:
+            df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").gte("record_ts",start_year.isoformat()).order("record_ts",desc=False).execute().data)
+            # air_temp = df["value"]
+            # time = df["record_ts"]
+            # st.write(f'{df.shape}')
+            # st.write(df["record_ts","value"][0:10,:])
+            # x_axis = st.selectbox("X-Axis", options=numeric_cols)
+            # y_axis = st.selectbox("Y-Axis", options=numeric_cols, index=1 if len(numeric_cols) > 1 else 0)
+            fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
+            st.plotly_chart(fig)
+        else:
+            st.error("Pick a year.")
     else:
         st.error("Pick a station.")
 
