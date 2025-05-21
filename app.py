@@ -33,7 +33,8 @@ st.title("Weather Station Explorer")
 limit = st.slider("Number of rows", 10, 500, 100)
 station_filter = st.text_input("Filter by station name (optional)")
 
-rows = conn.query("*", table = "stations", ttl = "10m").execute()
+# rows = conn.query("*", table = "stations", ttl = "10m").execute()
+rows = conn.table("stations").select("*").execute()
 
 for row in rows.data:
     st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
