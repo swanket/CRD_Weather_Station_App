@@ -47,9 +47,9 @@ if st.button("Filter by Station"):
 
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
-stations = conn.table("stations").select("*").or_("Native ID.eq.FW001,Native ID.eq.FW003").execute()
+stations = conn.table("stations").select("*").eq("Native ID","FW001").execute()
 
-st.write('Hello World!')
+# st.write('Hello World!')
 # st.write(f'{rows.data}')
 
 for row in stations.data:
