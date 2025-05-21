@@ -33,7 +33,7 @@ if st.button("Show me a Table"):
         st.error("Enter a table name: stations, variables, readings, or station_readings")
 
 
-station_temp = st.text_input("Pick a Station to Plot Air Temperature")
+station_temp = st.text_input("Pick a Station (Native ID) to Plot Air Temperature")
 year = st.text_input('And a starting year')
 
 # start_year = datetime(int(year),1,1)
