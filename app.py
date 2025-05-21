@@ -34,7 +34,7 @@ limit = st.slider("Number of rows", 10, 500, 100)
 station_filter = st.text_input("Filter by station name (optional)")
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
-rows = conn.table(table = "stations").select("*").execute()
+rows = conn.table(data = "stations").select("*").execute()
 
 st.write('Hello World!')
 
