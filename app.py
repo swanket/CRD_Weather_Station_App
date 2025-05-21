@@ -35,19 +35,16 @@ if st.button("Show me a Table"):
 
 station_temp = st.text_input("Pick a Station to Plot Air Temperature")
 year = st.text_input('And a starting year')
-if int(year) >= 2005:
-    st.error("Choose a year before 2005.")
+
 # start_year = datetime(int(year),1,1)
 if st.button('Plot'):
     if station_temp:
         if year:
+            if int(year) >= 2005:
+                st.error("Choose a year before 2005.")
             df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").gte("record_ts",datetime(int(year),1,1).isoformat()).order("record_ts",desc=False).execute().data)
-            # air_temp = df["value"]
-            # time = df["record_ts"]
             # st.write(f'{df.shape}')
             # st.write(df["record_ts","value"][0:10,:])
-            # x_axis = st.selectbox("X-Axis", options=numeric_cols)
-            # y_axis = st.selectbox("Y-Axis", options=numeric_cols, index=1 if len(numeric_cols) > 1 else 0)
             fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
             st.plotly_chart(fig)
         else:
