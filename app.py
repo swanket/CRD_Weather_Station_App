@@ -35,7 +35,7 @@ if st.button("Show me a Table"):
 station_temp = st.text_input("Pick a Station to Plot Air Temperature")
 if st.button('Plot'):
     if station_temp:
-        df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").execute().data)
+        df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").limit(2000).execute().data)
         air_temp = df["value"]
         time = df["record_ts"]
         st.write(f'{df.shape}')
