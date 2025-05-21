@@ -38,6 +38,7 @@ if st.button('Plot'):
         df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id","9").execute().data)
         air_temp = df["value"]
         time = df["record_ts"]
+        st.write(f'{df.shape()}')
         # st.write(df["record_ts","value"][0:10,:])
         # x_axis = st.selectbox("X-Axis", options=numeric_cols)
         # y_axis = st.selectbox("Y-Axis", options=numeric_cols, index=1 if len(numeric_cols) > 1 else 0)
