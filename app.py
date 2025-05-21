@@ -42,11 +42,18 @@ if st.button("Filter by Station"):
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
 stations = conn.table("stations").select("*").execute() # .eq("Native ID","FW001")
+table_generator = st.text_input("Display a table: stations, variables, readings, or station_readings (optional)")
+if st.button("Show me a Table"):
+    if table_generator:
+        if table_generator == 'stations':
+            st.write(pl.DataFrame(stations.data))
+        else:
+            st.error("Pick a valid table: stations, variables, readings, or station_readings ")
+    else: 
+        st.error("Enter a table name: stations, variables, readings, or station_readings")
 
-st.write(pl.DataFrame(stations.data))
-
-for row in stations.data:
-    st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
+# for row in stations.data:
+#     st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
 
 # query = f"SELECT * FROM stations"
 # if station_filter:
