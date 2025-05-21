@@ -35,7 +35,7 @@ if st.button("Show me a Table"):
 
 station_temp = st.text_input("Pick a Station (Native ID) to Plot Air Temperature")
 year = st.text_input('And a starting year')
-variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('1','2','3','4','5','6','7','8','9'))
+variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','2','3','4','5','6','7','8'))
 # start_year = datetime(int(year),1,1)
 if st.button('Plot'):
     if station_temp:
