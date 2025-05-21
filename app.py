@@ -25,7 +25,7 @@ from st_supabase_connection import SupabaseConnection
 #     conn.close()
 #     return pl.DataFrame(rows, schema=cols)
 
-conn = st.connection("connections.supabase", url = "https://qlyjuhnwxvltrvwsptnv.supabase.co", type = SupabaseConnection)
+conn = st.connection("supabase", type = SupabaseConnection)
 # st_supabase = st.connection(
 #     name="supabase_connection", 
 #     type=SupabaseConnection, 
