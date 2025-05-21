@@ -41,13 +41,13 @@ st.title("Weather Station Explorer")
 # station_filter = st.text_input("Filter by station name (optional)")
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
-rows = conn.table("variables").select("*").execute()
+rows = conn.table("stations").select("*").execute()
 
 st.write('Hello World!')
-st.write(f'{rows.data}')
+# st.write(f'{rows.data}')
 
-# for row in rows.data:
-#     st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
+for row in rows.data:
+    st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
 
 # query = f"SELECT * FROM stations"
 # if station_filter:
