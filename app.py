@@ -81,6 +81,8 @@ if st.button('Plot'):
                 st.error("Choose a year before 2005.")
             else:
                 df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id",variable).gte("record_ts",datetime(int(year),1,1).isoformat()).order("record_ts",desc=False).execute().data)
+                if variable not in df["variable_id"].to_list():
+                    st.error("Must pick a variable that the station records.")
                 fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
                 st.plotly_chart(fig)
 
