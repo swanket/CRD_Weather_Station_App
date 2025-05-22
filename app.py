@@ -55,14 +55,15 @@ if st.button("Show me a Table"):
     else: 
         st.error("Enter a table name: stations, variables, readings, or station_readings")
 
+st.header("3. Visualizing the Data")
+st.write("Here you can plot data starting on January 1st of the year you specify.")
+
 col1, col2 = st.columns(2)
 
-
 with col1:
-    station_temp = st.text_input("Pick a Station (Native ID) to Plot Air Temperature")
+    station_temp = st.text_input("Pick a Station (Native ID)")
     year = st.text_input('And a starting year')
     variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','2','3','4','5','6','7','8'))
-    # start_year = datetime(int(year),1,1)
 
 # with col2:
 #     rm = st.checkbox('Would you like to display the running mean?')
@@ -80,47 +81,10 @@ if st.button('Plot'):
                 st.error("Choose a year before 2005.")
             else:
                 df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id",variable).gte("record_ts",datetime(int(year),1,1).isoformat()).order("record_ts",desc=False).execute().data)
-                # st.write(f'{df.shape}')
-                # st.write(df["record_ts","value"][0:10,:])
                 fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
-                # fig, ax = plt.subplots(nrows=1,ncols=1)
-                # ax.scatter(df["record_ts"],df["value"])
-                # fig.suptitle(f"Temperature at Station {station_temp}")
-                # fig.supxlabel("Date")
-                # fig.supylabel("Air Temperature (C)")
                 st.plotly_chart(fig)
-                # if rm:
 
         else:
             st.error("Pick a year.")
     else:
         st.error("Pick a station.")
-
-
-
-
-
-
-
-# for row in stations.data:
-#     st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
-
-# query = f"SELECT * FROM stations"
-# if station_filter:
-#     query += f" WHERE station_name ILIKE '%{station_filter}%'"
-# query += f" LIMIT {limit}"
-
-# st.code(query)
-# df = query_to_polars(query)
-# st.dataframe(df.to_pandas())
-
-# # --- PLOTTING ---
-# # Only show plot if there are numeric columns
-# numeric_cols = [col for col in df.columns if pl.datatypes.is_numeric_dtype(df[col].dtype)]
-# if numeric_cols:
-#     x_axis = st.selectbox("X-Axis", options=numeric_cols)
-#     y_axis = st.selectbox("Y-Axis", options=numeric_cols, index=1 if len(numeric_cols) > 1 else 0)
-#     fig = px.scatter(df.to_pandas(), x=x_axis, y=y_axis, title=f"{y_axis} vs {x_axis}")
-#     st.plotly_chart(fig)
-# else:
-#     st.info("No numeric columns available for plotting.")
