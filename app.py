@@ -113,5 +113,5 @@ datetimes = [datetime.fromisoformat(ts) for ts in df["record_ts"].to_numpy()]
 timestamps = np.array([dt.timestamp() for dt in datetimes])
 timestamps -= timestamps.min()
 st.write(f'{type(df["value"][0])}')
-# st.write(f'{df["record_ts"][0]}')
+st.write(f'{df["value"][0]}')
 # poly = np.polyfit(timestamps,df["value"].to_numpy(),deg=poly_degree)
