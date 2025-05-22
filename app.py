@@ -26,6 +26,8 @@ fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().d
 st.plotly_chart(fig)
 
 st.header("2. The Database")
+st.write("This data was all downloaded from https://services.pacificclimate.org/met-data-portal-pcds/app/#close.")
+
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
 stations = conn.table("stations").select("*").execute() # .eq("Native ID","FW001")
