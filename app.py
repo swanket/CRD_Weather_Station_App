@@ -39,7 +39,7 @@ if st.button("Show me a Table"):
         elif table_generator == 'station_readings':
             st.write(pl.DataFrame(conn.table("station_readings").select("*").execute().data))
         elif table_generator == 'readings':
-            st.write(pl.DataFrame(conn.table("station_readings").select("*").limit(10).execute().data))
+            st.write(pl.DataFrame(conn.table("readings").select("*").limit(10).execute().data))
         else:
             st.error("Pick a valid table: stations, variables, readings, or station_readings ")
     else: 
