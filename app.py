@@ -93,7 +93,7 @@ if st.button('Plot'):
                 # if variable not in df["variable_id"].to_list():
                 #     st.error("Must pick a variable that the station records.")
                 # fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
-                fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":f"{pl.DataFrame(conn.table("variables").select("name").eq("variable_id",variable).execute().data)["name"][0]} ({conn.table("variables").select("unit").eq("variable_id",variable).execute().data})"})
+                fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":f"{pl.DataFrame(conn.table("variables").select("name").eq("variable_id",variable).execute().data)["name"][0]} ({pl.DataFrame(conn.table("variables").select("unit").eq("variable_id",variable).execute().data)["unit"][0]})"})
                 st.plotly_chart(fig)
 
         else:
