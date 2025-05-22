@@ -39,7 +39,7 @@ st.write("Below you can view the four tables in my supabase database. Stations i
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
 stations = conn.table("stations").select("*").execute() # .eq("Native ID","FW001")
-table_generator = st.selectbox("Display a table", "stations", "variables", "readings", "station_readings")
+table_generator = st.selectbox("Display a table", ("stations", "variables", "readings", "station_readings"))
 if st.button("Show me a Table"):
     if table_generator:
         if table_generator == 'stations':
