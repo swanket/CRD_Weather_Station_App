@@ -30,7 +30,11 @@ st.write("This data was all downloaded from https://services.pacificclimate.org/
 "I first created a database locally on my personal machine which included all historic data gathered at these nine stations. The data pull from the website gave me a table for each station which " \
 "included many NULL values where a reading was skipped that day. To handle this I normalized the database and created the readings table. I gave each variable an specific identifier (variable_ID) " \
 "and only included readings with a non-NULL value. This both saved space in the database and made the table much cleaner and user friendly. The variables and their respective identifiers are in " \
-"the variables table.\\ CHECK.")
+"the variables table.")
+st.write("After creating the full database locally, I had to move it to a cloud based system (in my case I used supabase) so that my Streamlit app could access it. Because supabase free only allows " \
+"up to 500 MB of data I shrunk my database to only include data collected before Jan 1, 2005. This cut down the number of stations to six.")
+st.write("Below you can view the four tables in my supabase database. Stations includes data on the stations. Variables includes information on the weather parameters measured. Station_readings " \
+"is a boolean matrix which shows which variabels each station measures. Readings gives the date and value of each reading.")
 
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
