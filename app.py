@@ -20,7 +20,7 @@ st.title("Capital Region District Weather Station Explorer")
 # st.map(pl.DataFrame(conn.table("stations").select("*").execute().data), latitude="Latitude",longitude="Longitude",size=100)
 
 st.header("1. Map of the Capital Region District")
-st.write("Here I have gathered data from five CRD weather stations spanning from 1996 through 2004. The locations of the six stations can be seen in the map below.")
+st.write("Here I have gathered data from five CRD weather stations spanning from 1996 through 2004. The locations of the 5 stations can be seen in the map below.")
 
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
 st.plotly_chart(fig)
@@ -39,7 +39,7 @@ st.write("Below you can view the four tables in my supabase database. Stations i
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
 stations = conn.table("stations").select("*").execute() # .eq("Native ID","FW001")
-table_generator = st.text_input("Display a table: stations, variables, readings, or station_readings (optional)")
+table_generator = st.selectbox("Display a table", "stations", "variables", "readings", "station_readings")
 if st.button("Show me a Table"):
     if table_generator:
         if table_generator == 'stations':
