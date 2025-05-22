@@ -116,3 +116,7 @@ values = np.array(df["value"].to_numpy(),dtype = float)
 # st.write(f'{type(df["value"][0])}')
 # st.write(f'{df["value"][0]}')
 poly = np.polyfit(timestamps,values,deg=poly_degree)
+df = df.with_columns(pl.Series("Polyfit",poly))
+fig = px.line(df,x="record_ts",y="Polyfit")
+st.plotly_chart(fig)
+
