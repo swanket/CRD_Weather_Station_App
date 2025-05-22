@@ -49,8 +49,8 @@ with col1:
     variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','2','3','4','5','6','7','8'))
     # start_year = datetime(int(year),1,1)
 
-with col2:
-    rm = st.checkbox('Would you like to display the running mean?')
+# with col2:
+#     rm = st.checkbox('Would you like to display the running mean?')
     # if rm:
     #     winlen = st.text_input('Window Lenth: ')
     #     # if int(winlen) :
