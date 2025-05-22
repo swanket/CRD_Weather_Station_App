@@ -109,6 +109,9 @@ station_poly = st.selectbox("Pick a Station", ('FW001','FW003','FW004','FW005','
 poly_year = st.slider("Year to fit",1995,2004,1995,1)
 poly_degree = st.slider("Degree of the polynomial", 1,6,3,1)
 df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_poly).eq("variable_id",9).gte("record_ts",datetime(poly_year,1,1).isoformat()).order("record_ts",desc=False).execute().data)
-st.write(f'{type(df["record_ts"][0])}')
-st.write(f'{df["record_ts"][0]}')
-# poly = np.polyfit(df["record_ts"].to_numpy(),df["value"].to_numpy(),deg=poly_degree)
+datetimes = [datetime.fromisoformat(ts) for ts in df["record_ts"].to_numpy()]
+timestamps = np.array([dt.timestamp() for dt in datetimes])
+timestamps -= timestamps.min()
+# st.write(f'{type(df["record_ts"][0])}')
+# st.write(f'{df["record_ts"][0]}')
+poly = np.polyfit(timestamps,df["value"].to_numpy(),deg=poly_degree)
