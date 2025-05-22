@@ -26,7 +26,8 @@ fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().d
 st.plotly_chart(fig)
 
 st.header("2. The Database")
-st.write("This data was all downloaded from https://services.pacificclimate.org/met-data-portal-pcds/app/#close.")
+st.write("This data was all downloaded from https://services.pacificclimate.org/met-data-portal-pcds/app/#close. I limited my data originally to the nine weather stations measured by the CRD." \
+"Check.")
 
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
