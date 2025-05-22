@@ -30,7 +30,7 @@ st.write("This data was all downloaded from https://services.pacificclimate.org/
 "I first created a database locally on my personal machine which included all historic data gathered at these nine stations. The data pull from the website gave me a table for each station which " \
 "included many NULL values where a reading was skipped that day. To handle this I normalized the database and created the readings table. I gave each variable an specific identifier (variable_ID) " \
 "and only included readings with a non-NULL value. This both saved space in the database and made the table much cleaner and user friendly. The variables and their respective identifiers are in " \
-"the variables table.")
+"the variables table.\\ CHECK.")
 
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
