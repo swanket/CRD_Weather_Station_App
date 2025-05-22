@@ -14,7 +14,7 @@ conn = st.connection("supabase", type = SupabaseConnection)
 
 st.title("Capital Region District Weather Station Explorer")
 
-st.map(pl.DataFrame(conn.table("stations").select("*").execute().data))
+st.map(pl.DataFrame(conn.table("stations").select("*").execute().data), latitude="Latitude",longitude="Longitude")
 
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
