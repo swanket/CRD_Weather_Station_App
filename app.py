@@ -20,7 +20,7 @@ st.title("Capital Region District Weather Station Explorer")
 # st.map(pl.DataFrame(conn.table("stations").select("*").execute().data), latitude="Latitude",longitude="Longitude",size=100)
 
 st.header("1. Map of the Capital Region District")
-st.write("Here I have gathered data from six CRD weather stations spanning from 1996 through 2004. The locations of the six stations can be seen in the map below.")
+st.write("Here I have gathered data from five CRD weather stations spanning from 1996 through 2004. The locations of the six stations can be seen in the map below.")
 
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
 st.plotly_chart(fig)
@@ -32,7 +32,7 @@ st.write("This data was all downloaded from https://services.pacificclimate.org/
 "and only included readings with a non-NULL value. This both saved space in the database and made the table much cleaner and user friendly. The variables and their respective identifiers are in " \
 "the variables table.")
 st.write("After creating the full database locally, I had to move it to a cloud based system (in my case I used supabase) so that my Streamlit app could access it. Because supabase free only allows " \
-"up to 500 MB of data I shrunk my database to only include data collected before Jan 1, 2005. This cut down the number of stations to six.")
+"up to 500 MB of data I shrunk my database to only include data collected before Jan 1, 2005. This cut down the number of stations to five.")
 st.write("Below you can view the four tables in my supabase database. Stations includes data on the stations. Variables includes information on the weather parameters measured. Station_readings " \
 "is a boolean matrix which shows which variabels each station measures. Readings gives the date and value of each reading.")
 
