@@ -34,11 +34,13 @@ if st.button("Show me a Table"):
     else: 
         st.error("Enter a table name: stations, variables, readings, or station_readings")
 
+col1, col2 = st.columns(2)
+with col1:
+    station_temp = st.text_input("Pick a Station (Native ID) to Plot Air Temperature")
+    year = st.text_input('And a starting year')
+    variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','2','3','4','5','6','7','8'))
+    # start_year = datetime(int(year),1,1)
 
-station_temp = st.text_input("Pick a Station (Native ID) to Plot Air Temperature")
-year = st.text_input('And a starting year')
-variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','2','3','4','5','6','7','8'))
-# start_year = datetime(int(year),1,1)
 if st.button('Plot'):
     if station_temp:
         if year:
