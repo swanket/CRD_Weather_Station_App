@@ -2,7 +2,7 @@ import os
 os.environ["WATCHDOG_IGNORE"] = "1"
 
 import streamlit as st
-import psycopg2
+import numpy as np
 import polars as pl
 import plotly.express as px
 import matplotlib.pyplot as plt
@@ -100,3 +100,9 @@ if st.button('Plot'):
             st.error("Pick a year.")
     else:
         st.error("Pick a station.")
+
+
+st.header("4. Some Analysis: Polynomial Regression of Air Temperature")
+st.write("Here you can run a polynomial regression on air temperature for any of the stations and any year. This will smooth the data by supressing noise.")
+
+poly_degree = st.slider("Degree of the polynomial", 1,6,3,1)
