@@ -3,3 +3,4 @@ polars
 psycopg2-binary
 plotly
 st-supabase-connection
+matplotlib
