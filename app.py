@@ -47,7 +47,9 @@ with col1:
     # start_year = datetime(int(year),1,1)
 
 with col2:
-    st.checkbox('CHECKBOX???')
+    rm = st.checkbox('Would you like to display the running mean?')
+    if rm:
+        winlen = st.text_input('Window Lenth')
 
 if st.button('Plot'):
     if station_temp:
