@@ -61,9 +61,18 @@ st.write("Here you can plot data starting on January 1st of the year you specify
 col1, col2 = st.columns(2)
 
 with col1:
-    station_temp = st.text_input("Pick a Station (Native ID)")
+    station_temp = st.selectbox("Pick a Station (Native ID)", ('FW001','FW003','FW004','FW005','FW006'))
     year = st.text_input('And a starting year')
-    variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','2','3','4','5','6','7','8'))
+    if station_temp == "FW001":
+        variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','4','5','6','8'))
+    elif station_temp == "FW003":
+        variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','6','8'))
+    elif station_temp == "FW004":
+        variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','5','6','7','8'))
+    elif station_temp == "FW005":
+        variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','4'))
+    elif station_temp == "FW006":
+        variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','5','6','8'))
 
 # with col2:
 #     rm = st.checkbox('Would you like to display the running mean?')
