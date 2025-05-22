@@ -14,7 +14,6 @@ conn = st.connection("supabase", type = SupabaseConnection)
 
 st.title("Capital Region District Weather Station Explorer")
 
-st.map(pl.DataFrame(conn.table("stations").select("*").execute().data), latitude="Latitude",longitude="Longitude",size=100)
 
 
 # rows = conn.query("*", table = "stations", ttl = "10m").execute()
@@ -54,6 +53,13 @@ if st.button('Plot'):
             st.error("Pick a year.")
     else:
         st.error("Pick a station.")
+
+
+
+
+st.map(pl.DataFrame(conn.table("stations").select("*").execute().data), latitude="Latitude",longitude="Longitude",size=100)
+
+
 
 # for row in stations.data:
 #     st.write(f'Station {row["Native ID"]} is at {row["Elevation"]} and began recording on {row["Record Start"]}.')
