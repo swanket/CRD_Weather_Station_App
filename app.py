@@ -19,6 +19,9 @@ st.title("Capital Region District Weather Station Explorer")
 
 # st.map(pl.DataFrame(conn.table("stations").select("*").execute().data), latitude="Latitude",longitude="Longitude",size=100)
 
+st.header("1. Six Weather Stations in the Capital Region District")
+st.subheader("Here I have gathered data from six CRD weather stations spanning from 1996 through 2004. The locations of the six stations can be seen in the map below.")
+
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
 st.plotly_chart(fig)
 
