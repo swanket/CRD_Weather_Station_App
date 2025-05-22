@@ -112,7 +112,7 @@ df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_pol
 datetimes = [datetime.fromisoformat(ts) for ts in df["record_ts"].to_numpy()]
 timestamps = np.array([dt.timestamp() for dt in datetimes])
 timestamps -= timestamps.min()
-values = np.array(df["values"].to_numpy(),dtype = float)
+values = np.array(df["value"].to_numpy(),dtype = float)
 # st.write(f'{type(df["value"][0])}')
 # st.write(f'{df["value"][0]}')
 poly = np.polyfit(timestamps,values,deg=poly_degree)
