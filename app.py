@@ -5,8 +5,11 @@ import streamlit as st
 import psycopg2
 import polars as pl
 import plotly.express as px
+import matplotlib.pyplot as plt
 from st_supabase_connection import SupabaseConnection
 from datetime import datetime
+
+# def running_mean(x,time,winlen):
 
 
 conn = st.connection("supabase", type = SupabaseConnection)
@@ -48,8 +51,12 @@ with col1:
 
 with col2:
     rm = st.checkbox('Would you like to display the running mean?')
-    if rm:
-        winlen = st.text_input('Window Lenth')
+    # if rm:
+    #     winlen = st.text_input('Window Lenth: ')
+    #     # if int(winlen) :
+
+    # else:
+    #     st.error("Set a window Length")
 
 if st.button('Plot'):
     if station_temp:
@@ -60,8 +67,15 @@ if st.button('Plot'):
                 df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id",variable).gte("record_ts",datetime(int(year),1,1).isoformat()).order("record_ts",desc=False).execute().data)
                 # st.write(f'{df.shape}')
                 # st.write(df["record_ts","value"][0:10,:])
-                fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
-                st.plotly_chart(fig)
+                # fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
+                fig, ax = plt.subplots(nrows=1,ncols=1)
+                ax.scatter(df["record_ts"],df["value"])
+                fig.suptitle(f"Temperature at Station {station_temp}")
+                fig.supxlabel("Date")
+                fig.supylabel("Air Temperature (C)")
+                st.pyplot(fig)
+                # if rm:
+
         else:
             st.error("Pick a year.")
     else:
