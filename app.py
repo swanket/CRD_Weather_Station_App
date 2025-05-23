@@ -8,6 +8,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 from st_supabase_connection import SupabaseConnection
 from datetime import datetime
+import plotly.graph_objects as go
 
 # def running_mean(x,time,winlen):
 
@@ -120,6 +121,10 @@ mymodel = np.poly1d(poly)
 # st.write(f'{np.shape(poly)}')
 df = df.with_columns(pl.Series("Polyfit",mymodel(timestamps)))
 fig = px.scatter(df,x="record_ts",y="value")
-fig.add_trace(px.line(df,x="record_ts",y="Polyfit"))
+fig.add_trace(go.Scatter(x=df["record_ts"].to_list(),
+        y=df["Polyfit"].to_list(),
+        mode="lines",
+        name="Polyfit",
+        line=dict(color="red")))
 st.plotly_chart(fig)
 
