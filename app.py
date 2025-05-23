@@ -151,10 +151,9 @@ df = df.with_columns(pl.Series("Polyfit",mymodel(timestamps)))
 # st.plotly_chart(fig)
 
 
-fig = px.scatter(df,x="record_ts",y="value")
+fig = px.line(df,x="record_ts",y="Polyfit")
 fig.add_trace(go.Scatter(x=df["record_ts"].to_list(),
-        y=df["Polyfit"].to_list(),
-        mode="lines",
+        y=df["value"].to_list(),
         name="Polyfit",
         line=dict(color="red")))
 st.plotly_chart(fig)
