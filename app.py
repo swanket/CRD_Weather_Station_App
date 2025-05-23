@@ -62,6 +62,7 @@ col1, col2 = st.columns(2)
 with col1:
     station_temp = st.selectbox("Pick a Station (Native ID)", ('FW001','FW003','FW004','FW005','FW006'))
     year = st.text_input('And a starting year')
+    year = st.slider('And a starting year',1995,2004,1995,1)
     if station_temp == "FW001":
         variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','4','5','6','8'))
     elif station_temp == "FW003":
