@@ -1,6 +1,3 @@
-# import os
-# os.environ["WATCHDOG_IGNORE"] = "1"
-
 import streamlit as st
 import numpy as np
 import polars as pl
