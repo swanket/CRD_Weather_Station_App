@@ -57,22 +57,22 @@ if st.button("Show me a Table"):
 st.header("3. Visualizing the Data")
 st.write("Here you can plot data starting on January 1st of the year you specify.")
 
-col1, col2 = st.columns(2)
+# col1, col2 = st.columns(2)
 
-with col1:
-    station_temp = st.selectbox("Pick a Station (Native ID)", ('FW001','FW003','FW004','FW005','FW006'))
-    year = st.text_input('And a starting year')
-    year = st.slider('And a starting year',1995,2004,1995,1)
-    if station_temp == "FW001":
-        variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','4','5','6','8'))
-    elif station_temp == "FW003":
-        variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','6','8'))
-    elif station_temp == "FW004":
-        variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','5','6','7','8'))
-    elif station_temp == "FW005":
-        variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','4'))
-    elif station_temp == "FW006":
-        variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','5','6','8'))
+# with col1:
+station_temp = st.selectbox("Pick a Station (Native ID)", ('FW001','FW003','FW004','FW005','FW006'))
+# year = st.text_input('And a starting year')
+year = st.slider('And a starting year',1995,2004,1995,1)
+if station_temp == "FW001":
+    variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','4','5','6','8'))
+elif station_temp == "FW003":
+    variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','6','8'))
+elif station_temp == "FW004":
+    variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','5','6','7','8'))
+elif station_temp == "FW005":
+    variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','4'))
+elif station_temp == "FW006":
+    variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','5','6','8'))
 
 
 if st.button('Plot'):
