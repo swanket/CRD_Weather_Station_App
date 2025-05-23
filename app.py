@@ -120,12 +120,13 @@ poly = np.polyfit(timestamps,values,deg=poly_degree)
 mymodel = np.poly1d(poly)
 # st.write(f'{np.shape(poly)}')
 df = df.with_columns(pl.Series("Polyfit",mymodel(timestamps)))
+
 fig = go.Figure()
 
 fig.add_trace(
     go.Scatter(
-        x=df["record_ts"].to_list(),
-        y=df["value"].to_list(),
+        x=df["record_ts"],
+        y=df["value"],
         mode="markers",
         name="Observed",
         marker=dict(color="blue")
