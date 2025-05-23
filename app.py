@@ -94,7 +94,7 @@ if st.button('Plot'):
 st.header("4. Some Analysis: Polynomial Regression of Air Temperature")
 st.write("Here you can run a polynomial regression on air temperature for any of the stations and any year. This regression uses an n-th degree polynomial to model the raw data. This " \
 "creates a best fit line for the raw data depending on the degree of the polynomial chosen. Increasing the degree of the polynomial will allow the model to capture fluctuations " \
-"and different wavelengths in the data, but you run the risk of introducing wavelengths are do not exist in the real dataset.")
+"and different wavelengths in the data, but you run the risk of introducing wavelengths that do not exist in the real dataset.")
 
 station_poly = st.selectbox("Pick a Station", ('FW001','FW003','FW004','FW005','FW006'))
 poly_year = st.slider("Year to fit",1995,2004,1995,1)
