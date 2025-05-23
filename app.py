@@ -121,41 +121,41 @@ mymodel = np.poly1d(poly)
 # st.write(f'{np.shape(poly)}')
 df = df.with_columns(pl.Series("Polyfit",mymodel(timestamps)))
 
-fig = go.Figure()
+# fig = go.Figure()
 
-fig.add_trace(
-    go.Scatter(
-        x=df["record_ts"],
-        y=df["value"],
-        mode="markers",
-        name="Observed",
-        marker=dict(color="blue")
-    )
-)
-fig.add_trace(
-    go.Scatter(
-        x=df["record_ts"].to_list(),
-        y=df["Polyfit"].to_list(),
-        mode="lines",
-        name="Polyfit",
-        line=dict(color="red", width=2)
-    )
-)
-fig.update_layout(
-    title="Observed vs Polyfit",
-    xaxis_title="Timestamp",
-    yaxis_title="Value",
-    template="plotly_white"
-)
-
-st.plotly_chart(fig)
-
-
-# fig = px.scatter(df,x="record_ts",y="value")
-# fig.add_trace(go.Scatter(x=df["record_ts"].to_list(),
+# fig.add_trace(
+#     go.Scatter(
+#         x=df["record_ts"],
+#         y=df["value"],
+#         mode="markers",
+#         name="Observed",
+#         marker=dict(color="blue")
+#     )
+# )
+# fig.add_trace(
+#     go.Scatter(
+#         x=df["record_ts"].to_list(),
 #         y=df["Polyfit"].to_list(),
 #         mode="lines",
 #         name="Polyfit",
-#         line=dict(color="red")))
+#         line=dict(color="red", width=2)
+#     )
+# )
+# fig.update_layout(
+#     title="Observed vs Polyfit",
+#     xaxis_title="Timestamp",
+#     yaxis_title="Value",
+#     template="plotly_white"
+# )
+
 # st.plotly_chart(fig)
+
+
+fig = px.scatter(df,x="record_ts",y="value")
+fig.add_trace(go.Scatter(x=df["record_ts"].to_list(),
+        y=df["Polyfit"].to_list(),
+        mode="lines",
+        name="Polyfit",
+        line=dict(color="red")))
+st.plotly_chart(fig)
 
