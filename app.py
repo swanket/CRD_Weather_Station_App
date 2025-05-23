@@ -10,7 +10,6 @@ from st_supabase_connection import SupabaseConnection
 from datetime import datetime
 import plotly.graph_objects as go
 
-# def running_mean(x,time,winlen):
 
 
 conn = st.connection("supabase", type = SupabaseConnection)
@@ -18,7 +17,6 @@ conn = st.connection("supabase", type = SupabaseConnection)
 
 st.title("Capital Region District Weather Station Explorer")
 
-# st.map(pl.DataFrame(conn.table("stations").select("*").execute().data), latitude="Latitude",longitude="Longitude",size=100)
 
 st.header("1. Map of the Capital Region District")
 st.write("Here I have gathered data from five CRD weather stations spanning from 1996 through 2004. The locations of the 5 stations can be seen in the map below.")
@@ -75,14 +73,6 @@ with col1:
     elif station_temp == "FW006":
         variable = st.selectbox('Which variable would you like to plot? (use variable_id)',('9','1','5','6','8'))
 
-# with col2:
-#     rm = st.checkbox('Would you like to display the running mean?')
-    # if rm:
-    #     winlen = st.text_input('Window Lenth: ')
-    #     # if int(winlen) :
-
-    # else:
-    #     st.error("Set a window Length")
 
 if st.button('Plot'):
     if station_temp:
@@ -91,9 +81,7 @@ if st.button('Plot'):
                 st.error("Choose a year before 2005.")
             else:
                 df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_temp).eq("variable_id",variable).gte("record_ts",datetime(int(year),1,1).isoformat()).order("record_ts",desc=False).execute().data)
-                # if variable not in df["variable_id"].to_list():
-                #     st.error("Must pick a variable that the station records.")
-                # fig = px.scatter(df, x="record_ts",y="value", title=f"Temperature at Station {station_temp}",labels={"record_ts":"Timestamp","value":"Air temperature (C)"})
+       
                 fig = px.scatter(df, x="record_ts",y="value", labels={"record_ts":"Timestamp","value":f"{pl.DataFrame(conn.table("variables").select("name").eq("variable_id",variable).execute().data)["name"][0]} ({pl.DataFrame(conn.table("variables").select("unit").eq("variable_id",variable).execute().data)["unit"][0]})"})
                 st.plotly_chart(fig)
 
@@ -104,7 +92,9 @@ if st.button('Plot'):
 
 
 st.header("4. Some Analysis: Polynomial Regression of Air Temperature")
-st.write("Here you can run a polynomial regression on air temperature for any of the stations and any year. This will smooth the data by supressing noise.")
+st.write("Here you can run a polynomial regression on air temperature for any of the stations and any year. This regression uses an n-th degree polynomial to model the raw data. This " \
+"creates a best fit line for the raw data depending on the degree of the polynomial chosen. Increasing the degree of the polynomial will allow the model to capture fluctuations " \
+"and different wavelengths in the data, but you run the risk of introducing wavelengths are do not exist in the real dataset.")
 
 station_poly = st.selectbox("Pick a Station", ('FW001','FW003','FW004','FW005','FW006'))
 poly_year = st.slider("Year to fit",1995,2004,1995,1)
@@ -120,35 +110,6 @@ poly = np.polyfit(timestamps,values,deg=poly_degree)
 mymodel = np.poly1d(poly)
 # st.write(f'{np.shape(poly)}')
 df = df.with_columns(pl.Series("Polyfit",mymodel(timestamps)))
-
-# fig = go.Figure()
-
-# fig.add_trace(
-#     go.Scatter(
-#         x=df["record_ts"],
-#         y=df["value"],
-#         mode="markers",
-#         name="Observed",
-#         marker=dict(color="blue")
-#     )
-# )
-# fig.add_trace(
-#     go.Scatter(
-#         x=df["record_ts"].to_list(),
-#         y=df["Polyfit"].to_list(),
-#         mode="lines",
-#         name="Polyfit",
-#         line=dict(color="red", width=2)
-#     )
-# )
-# fig.update_layout(
-#     title="Observed vs Polyfit",
-#     xaxis_title="Timestamp",
-#     yaxis_title="Value",
-#     template="plotly_white"
-# )
-
-# st.plotly_chart(fig)
 
 
 fig = px.line(df,x="record_ts",y="Polyfit",)
