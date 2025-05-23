@@ -119,6 +119,7 @@ poly = np.polyfit(timestamps,values,deg=poly_degree)
 mymodel = np.poly1d(poly)
 # st.write(f'{np.shape(poly)}')
 df = df.with_columns(pl.Series("Polyfit",mymodel(timestamps)))
-fig = px.line(df,x="record_ts",y="Polyfit")
+fig = px.scatter(df,x="record_ts",y="value")
+fig.add_trace(px.line(df,x="record_ts",y="Polyfit"))
 st.plotly_chart(fig)
 
