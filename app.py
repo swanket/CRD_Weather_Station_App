@@ -25,7 +25,9 @@ st.write("Here I have gathered data from five CRD weather stations spanning from
 MAPBOX_TOKEN = st.secrets["mapbox"]["token"]
 pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
-df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).execute().data)
+map_year = st.slider("Year to fit",1995,2004,1995,1) # Select a year
+
+df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).gte("record_ts",datetime(map_year,1,1).isoformat()).lte("record_ts",datetime(map_year+1,1,1).isoformat()).order("record_ts",desc=False).execute().data)
 
 # Extract Latitude and Longitude from struct
 df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
