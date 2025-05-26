@@ -8,19 +8,21 @@ from datetime import datetime
 import plotly.graph_objects as go
 
 
-
+# Connect to the Supabase database
 conn = st.connection("supabase", type = SupabaseConnection)
 
-
+# Set the Title
 st.title("Capital Region District Weather Station Explorer")
 
-
+# Create section 1 and write intro
 st.header("1. Map of the Capital Region District")
 st.write("Here I have gathered data from five CRD weather stations spanning from 1996 through 2004. The locations of the 5 stations can be seen in the map below.")
 
+# Plot the locations of the 5 stations on an interactive map
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
 st.plotly_chart(fig)
 
+# Create and write section 2
 st.header("2. The Database")
 st.write("This data was all downloaded from https://services.pacificclimate.org/met-data-portal-pcds/app/#close. I limited my data originally to the nine weather stations measured by the CRD. " \
 "I first created a database locally on my personal machine which included all historic data gathered at these nine stations. The data pull from the website gave me a table for each station which " \
@@ -33,10 +35,10 @@ st.write("Below you can view the four tables in my supabase database. Stations i
 "is a boolean matrix which shows which variabels each station measures. Readings gives the date and value of each reading.")
 
 
-# rows = conn.query("*", table = "stations", ttl = "10m").execute()
-stations = conn.table("stations").select("*").execute() # .eq("Native ID","FW001")
-table_generator = st.selectbox("Display a table", ("stations", "variables", "readings", "station_readings"))
-if st.button("Show me a Table"):
+# Create a table display button with input paramaeters
+stations = conn.table("stations").select("*").execute() # connect to the stations table
+table_generator = st.selectbox("Display a table", ("stations", "variables", "readings", "station_readings")) # create a selection box input
+if st.button("Show me a Table"): # create a button which displays one of the tables in the database
     if table_generator:
         if table_generator == 'stations':
             st.write(pl.DataFrame(stations.data))
@@ -47,19 +49,22 @@ if st.button("Show me a Table"):
         elif table_generator == 'readings':
             st.write(pl.DataFrame(conn.table("readings").select("*").limit(10).execute().data))
         else:
-            st.error("Pick a valid table: stations, variables, readings, or station_readings ")
+            st.error("Pick a valid table: stations, variables, readings, or station_readings ") # send an error if a table which isn't real is picked
     else: 
-        st.error("Enter a table name: stations, variables, readings, or station_readings")
+        st.error("Enter a table name: stations, variables, readings, or station_readings") # send an error if no table is picked
 
+
+# Create and write section 3
 st.header("3. Visualizing the Data")
 st.write("Here you can plot data starting on January 1st of the year you specify.")
 
-# col1, col2 = st.columns(2)
+# plot a variable starting in a designated year from a designated station
 
-# with col1:
-station_temp = st.selectbox("Pick a Station (Native ID)", ('FW001','FW003','FW004','FW005','FW006'))
+station_temp = st.selectbox("Pick a Station (Native ID)", ('FW001','FW003','FW004','FW005','FW006')) # Pick a station using a selectbox
 # year = st.text_input('And a starting year')
-year = st.slider('And a starting year',1995,2004,1995,1)
+year = st.slider('And a starting year',1995,2004,1995,1) # pick a year using a selectbox
+
+# Pick the variable to plot
 if station_temp == "FW001":
     variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','4','5','6','8'))
 elif station_temp == "FW003":
@@ -71,7 +76,7 @@ elif station_temp == "FW005":
 elif station_temp == "FW006":
     variable = st.selectbox('Which variable would you like to plot? (Check the variables table for variable_id descriptions)',('9','1','5','6','8'))
 
-
+# create a button which produces tht plot
 if st.button('Plot'):
     if station_temp:
         if year:
@@ -84,32 +89,30 @@ if st.button('Plot'):
                 st.plotly_chart(fig)
 
         else:
-            st.error("Pick a year.")
+            st.error("Pick a year.") # error if there is no year picked
     else:
-        st.error("Pick a station.")
+        st.error("Pick a station.") # error if there is no station picked
 
 
+# Create and write section 4
 st.header("4. Some Analysis: Polynomial Regression of Air Temperature")
 st.write("Here you can run a polynomial regression on air temperature for any of the stations and any year. This regression uses an n-th degree polynomial to model the raw data. This " \
 "creates a best fit line for the raw data depending on the degree of the polynomial chosen. Increasing the degree of the polynomial will allow the model to capture fluctuations " \
 "and different wavelengths in the data, but you run the risk of introducing wavelengths that do not exist in the real dataset.")
 
-station_poly = st.selectbox("Pick a Station", ('FW001','FW003','FW004','FW005','FW006'))
-poly_year = st.slider("Year to fit",1995,2004,1995,1)
-poly_degree = st.slider("Degree of the polynomial", 1,20,3,1)
-df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_poly).eq("variable_id",9).gte("record_ts",datetime(poly_year,1,1).isoformat()).order("record_ts",desc=False).execute().data)
-datetimes = [datetime.fromisoformat(ts) for ts in df["record_ts"].to_numpy()]
-timestamps = np.array([dt.timestamp() for dt in datetimes])
-timestamps -= timestamps.min()
-values = np.array(df["value"].to_numpy(),dtype = float)
-# st.write(f'{type(df["value"][0])}')
-# st.write(f'{df["value"][0]}')
-poly = np.polyfit(timestamps,values,deg=poly_degree)
-mymodel = np.poly1d(poly)
-# st.write(f'{np.shape(poly)}')
-df = df.with_columns(pl.Series("Polyfit",mymodel(timestamps)))
+station_poly = st.selectbox("Pick a Station", ('FW001','FW003','FW004','FW005','FW006')) # Select a station
+poly_year = st.slider("Year to fit",1995,2004,1995,1) # Select a year
+poly_degree = st.slider("Degree of the polynomial", 1,20,3,1) # SElect a degree of the polynomial
+df = pl.DataFrame(conn.table("readings").select("*").eq("station_id",station_poly).eq("variable_id",9).gte("record_ts",datetime(poly_year,1,1).isoformat()).order("record_ts",desc=False).execute().data) # Create the dataframe where year >= year chosen and the station is the station chosen
+datetimes = [datetime.fromisoformat(ts) for ts in df["record_ts"].to_numpy()] # text time column to datetimes
+timestamps = np.array([dt.timestamp() for dt in datetimes]) # convert datetimes to timestamp type
+timestamps -= timestamps.min() # normalize timestamps
+values = np.array(df["value"].to_numpy(),dtype = float) # create an array with all of the values
+poly = np.polyfit(timestamps,values,deg=poly_degree) # create the polynomial fit 
+mymodel = np.poly1d(poly) # create a model which uses the polynomial fit
+df = df.with_columns(pl.Series("Polyfit",mymodel(timestamps))) # add the polynomial regression to the polars dataframe as a new column called "Polyfit"
 
-
+# Plot the raw data and the regression
 fig = px.line(df,x="record_ts",y="Polyfit",)
 fig.add_trace(go.Scatter(x=df["record_ts"].to_list(),
         y=df["value"].to_list(),
