@@ -27,7 +27,7 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 map_year = st.slider("Year to view",1995,2004,1995,1) # Select a year
 max_date = map_year+1
-# st.write(max_date)
+st.write(datetime(map_year,1,1).isoformat())
 
 df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).gte("record_ts",datetime(map_year,1,1).isoformat()).lte("record_ts",datetime(map_year+1,1,1).isoformat()).execute().data)
 
