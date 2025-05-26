@@ -49,7 +49,7 @@ selected_time = st.slider(
 # Filter or display selection
 st.write("You selected:", selected_time)
 
-st.write(df[0:10,:])
+st.write(df.shape)
 
 # Plot the locations of the 5 stations on an interactive map
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
