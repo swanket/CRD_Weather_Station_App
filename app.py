@@ -26,6 +26,8 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).execute().data)
 
+st.write(df[0:10,:])
+
 # Plot the locations of the 5 stations on an interactive map
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
 st.plotly_chart(fig)
