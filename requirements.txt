@@ -6,4 +6,4 @@ st-supabase-connection
 matplotlib
 numpy
 pydeck
-json
+# json
