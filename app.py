@@ -32,7 +32,7 @@ df = df.with_columns([
     pl.col("stations").struct.field("Latitude").alias("Latitude"),
     pl.col("stations").struct.field("Longitude").alias("Longitude")
 ])
-
+df = df.drop("stations")
 # lat_lon_data = df["stations"].map_elements(lambda s: json.loads(s.replace('""', '"')))
 
 # df = df.hstack(lat_lon_data)
