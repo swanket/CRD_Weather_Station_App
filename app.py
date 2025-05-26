@@ -26,6 +26,24 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).execute().data)
 
+df = df.with_columns([
+    pl.col("stations").str.replace_all('""', '"').alias("stations")
+])
+
+# Parse JSON and extract fields
+df = df.with_columns([
+    pl.col("stations").str.json_extract(pl.JsonDict).alias("parsed")
+])
+
+# Extract fields into separate columns
+df = df.with_columns([
+    pl.col("parsed").struct.field("Latitude").alias("Latitude"),
+    pl.col("parsed").struct.field("Longitude").alias("Longitude")
+])
+
+# Drop the intermediate columns if desired
+df = df.drop(["stations", "parsed"])
+
 st.write(df[0:10,:])
 
 # Plot the locations of the 5 stations on an interactive map
