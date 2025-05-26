@@ -25,7 +25,7 @@ st.write("Here I have gathered data from five CRD weather stations spanning from
 MAPBOX_TOKEN = st.secrets["mapbox"]["token"]
 pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
-map_year = st.slider("Year to fit",1995,2004,1995,1) # Select a year
+map_year = st.slider("Year to view",1995,2004,1995,1) # Select a year
 max_date = map_year+1
 st.write(max_date)
 
@@ -34,7 +34,7 @@ df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stat
 # Extract Latitude and Longitude from struct
 df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
 df = df.drop("stations")
-
+st.write(type(df["record_ts"][0]))
 df = df.with_columns(pl.col("record_ts").str.to_datetime().alias("record_ts"))
 
 # Get min and max datetimes
@@ -42,13 +42,7 @@ min_ts = df["record_ts"].min()
 max_ts = df["record_ts"].max()
 
 # Create slider
-selected_time = st.slider(
-    "Select timestamp:",
-    min_value=min_ts,
-    max_value=max_ts,
-    value=min_ts,  # default value
-    format="YYYY-MM-DD HH:mm:ss"
-)
+selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,format="YYYY-MM-DD HH:mm:ss")
 
 # Filter or display selection
 st.write("You selected:", selected_time)
