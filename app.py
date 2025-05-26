@@ -7,6 +7,7 @@ from st_supabase_connection import SupabaseConnection
 from datetime import datetime
 import plotly.graph_objects as go
 import pydeck as pdk
+import json
 
 
 # Connect to the Supabase database
@@ -26,22 +27,9 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).execute().data)
 
-# df = df.with_columns([
-#     pl.col("stations").str.replace_all('""', '"').alias("stations")
-# ])
-# Parse JSON and extract fields
-df = df.with_columns([
-    pl.col("stations").str.json_extract(pl.JsonDict).alias("parsed")
-])
+lat_lon_data = df["stations"].apply(lambda s: json.loads(s.replace('""', '"')))
 
-# Extract fields into separate columns
-df = df.with_columns([
-    pl.col("parsed").struct.field("Latitude").alias("Latitude"),
-    pl.col("parsed").struct.field("Longitude").alias("Longitude")
-])
-
-# Drop the intermediate columns if desired
-df = df.drop(["stations", "parsed"])
+df = df.hstack(lat_lon_data)
 
 st.write(df[0:10,:])
 
