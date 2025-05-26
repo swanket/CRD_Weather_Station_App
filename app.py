@@ -27,9 +27,15 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).execute().data)
 
-lat_lon_data = df["stations"].map_elements(lambda s: json.loads(s.replace('""', '"')))
+# Extract Latitude and Longitude from struct
+df = df.with_columns([
+    pl.col("stations").struct.field("Latitude").alias("Latitude"),
+    pl.col("stations").struct.field("Longitude").alias("Longitude")
+])
 
-df = df.hstack(lat_lon_data)
+# lat_lon_data = df["stations"].map_elements(lambda s: json.loads(s.replace('""', '"')))
+
+# df = df.hstack(lat_lon_data)
 
 st.write(df[0:10,:])
 
