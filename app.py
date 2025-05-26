@@ -29,7 +29,6 @@ df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stat
 # df = df.with_columns([
 #     pl.col("stations").str.replace_all('""', '"').alias("stations")
 # ])
-
 # Parse JSON and extract fields
 df = df.with_columns([
     pl.col("stations").str.json_extract(pl.JsonDict).alias("parsed")
