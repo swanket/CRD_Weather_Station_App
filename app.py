@@ -34,7 +34,7 @@ df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stat
 # Extract Latitude and Longitude from struct
 df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
 df = df.drop("stations")
-st.write(type(df["record_ts"][0][0]))
+st.write(type(df["record_ts"]))
 df = df.with_columns(pl.col("record_ts").str.to_datetime().alias("record_ts"))
 
 # Get min and max datetimes
