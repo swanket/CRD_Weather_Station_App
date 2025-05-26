@@ -5,3 +5,5 @@ plotly
 st-supabase-connection
 matplotlib
 numpy
+pydeck
+json
