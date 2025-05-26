@@ -27,7 +27,7 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).execute().data)
 
-lat_lon_data = df["stations"].apply(lambda s: json.loads(s.replace('""', '"')))
+lat_lon_data = df["stations"].map_elements(lambda s: json.loads(s.replace('""', '"')))
 
 df = df.hstack(lat_lon_data)
 
