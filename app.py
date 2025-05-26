@@ -24,7 +24,7 @@ st.write("Here I have gathered data from five CRD weather stations spanning from
 MAPBOX_TOKEN = st.secrets["mapbox"]["token"]
 pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
-df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).execute().data())
+df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).execute().data)
 
 # Plot the locations of the 5 stations on an interactive map
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
