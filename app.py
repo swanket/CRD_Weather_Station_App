@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from st_supabase_connection import SupabaseConnection
 from datetime import datetime
 import plotly.graph_objects as go
+import pydeck as pdk
 
 
 # Connect to the Supabase database
@@ -17,6 +18,13 @@ st.title("Capital Region District Weather Station Explorer")
 # Create section 1 and write intro
 st.header("1. Map of the Capital Region District")
 st.write("Here I have gathered data from five CRD weather stations spanning from 1996 through 2004. The locations of the 5 stations can be seen in the map below.")
+
+
+# Load token from Streamlit secrets
+MAPBOX_TOKEN = st.secrets["mapbox"]["token"]
+pdk.settings.mapbox_api_key = MAPBOX_TOKEN
+
+df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable)id",9).execute().data())
 
 # Plot the locations of the 5 stations on an interactive map
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
