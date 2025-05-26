@@ -29,7 +29,7 @@ map_year = st.slider("Year to fit",1995,2004,1995,1) # Select a year
 max_date = map_year+1
 st.write(max_date)
 
-df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).gte("record_ts",datetime(map_year,1,1).isoformat()).lte("record_ts",datetime(map_year+1,1,1).isoformat()).order("record_ts",desc=False).execute().data)
+df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).gte("record_ts",datetime(map_year,1,1).isoformat()).lte("record_ts",datetime(map_year+1,1,1).isoformat()).execute().data)
 
 # Extract Latitude and Longitude from struct
 df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
