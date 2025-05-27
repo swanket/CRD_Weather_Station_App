@@ -45,12 +45,13 @@ if df.is_empty():
 # df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).gte("record_ts",datetime(map_year,1,1).isoformat()).lte("record_ts",datetime(map_year+1,1,1).isoformat()).execute().data)
 
 # Extract Latitude and Longitude from struct
-df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
-df = df.drop("stations")
+else:
+    df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
+    df = df.drop("stations")
 
-df = df.with_columns(pl.col("record_ts").str.to_datetime().alias("record_ts"))
+    df = df.with_columns(pl.col("record_ts").str.to_datetime().alias("record_ts"))
 
-st.write(df)
+    st.write(df)
 
 # # Create slider
 # selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,format="YYYY-MM-DD HH:mm:ss")
