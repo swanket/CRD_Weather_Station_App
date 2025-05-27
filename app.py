@@ -40,7 +40,8 @@ st.write(datetime(map_year,1,1))
 st.write(datetime(map_year,1,1).isoformat())
 
 df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).eq("record_ts",selected_time.isoformat()).execute().data)
-
+if df.is_empty():
+    st.error("No data for this date.")
 # df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).gte("record_ts",datetime(map_year,1,1).isoformat()).lte("record_ts",datetime(map_year+1,1,1).isoformat()).execute().data)
 
 # Extract Latitude and Longitude from struct
