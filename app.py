@@ -45,7 +45,7 @@ df = df.drop("stations")
 
 df = df.with_columns(pl.col("record_ts").str.to_datetime().alias("record_ts"))
 
-
+st.write(df)
 
 # # Create slider
 # selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,format="YYYY-MM-DD HH:mm:ss")
