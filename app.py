@@ -98,6 +98,8 @@ if st.button('Plot'):
     else:
         st.error("Pick a station.") # error if there is no station picked
 
+st.write("Below is an interactive map where you can view air temperature at each station for a given day and time.")
+
 # Load token from Streamlit secrets
 MAPBOX_TOKEN = st.secrets["mapbox"]["token"]
 pdk.settings.mapbox_api_key = MAPBOX_TOKEN
