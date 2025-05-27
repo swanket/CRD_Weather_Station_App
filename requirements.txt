@@ -7,3 +7,4 @@ matplotlib
 numpy
 pydeck
 pandas
+requests
