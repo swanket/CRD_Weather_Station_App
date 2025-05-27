@@ -28,7 +28,7 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 map_year = st.slider("Year to view",1995,2004,1995,1) # Select a year
 # Get min and max datetimes
 min_ts = datetime(map_year,1,1)
-max_ts = datetime(map_year,12,31)
+max_ts = datetime(map_year,12,31,23)
 # Create slider
 selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,format="YYYY-MM-DD HH:mm:ss")
 
