@@ -23,49 +23,6 @@ st.header("1. Map of the Capital Region District")
 st.write("Here I have gathered data from five CRD weather stations spanning from 1996 through 2004. The locations of the 5 stations can be seen in the map below.")
 
 
-# Load token from Streamlit secrets
-MAPBOX_TOKEN = st.secrets["mapbox"]["token"]
-pdk.settings.mapbox_api_key = MAPBOX_TOKEN
-
-map_year = st.slider("Year to view",1995,2004,1995,1) # Select a year
-# Get min and max datetimes
-if map_year == 1995:
-    min_ts = datetime(map_year,11,13,11)
-    max_ts = datetime(map_year,12,31,23)    
-else:
-    min_ts = datetime(map_year,1,1)
-    max_ts = datetime(map_year,12,31,23)
-# Create slider
-selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,step=timedelta(hours=1),format="YYYY-MM-DD HH:mm:ss")
-
-# st.write(datetime(map_year,1,1))
-# st.write(datetime(map_year,1,1).isoformat())
-
-df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).eq("record_ts",selected_time.isoformat()).execute().data)
-if df.is_empty():
-    st.error("No data for this date.")
-# df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).gte("record_ts",datetime(map_year,1,1).isoformat()).lte("record_ts",datetime(map_year+1,1,1).isoformat()).execute().data)
-
-# Extract Latitude and Longitude from struct
-else:
-    df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
-    df = df.drop("stations")
-
-    # df = df.with_columns(pl.col("record_ts").str.to_datetime().alias("record_ts"))
-
-    # Create a pydeck map
-    df_pd = df.to_pandas()
-    layer = pdk.Layer("ScatterplotLayer",df_pd,get_position='[Longitude, Latitude]',get_color='[200, 30, 0, 160]',get_radius=1000,pickable=True)
-    # Set the viewport
-    view_state = pdk.ViewState(latitude=df_pd["Latitude"].mean(),longitude=df_pd["Longitude"].mean(),zoom=7,pitch=0)
-    # st.write("ViewState Type:", type(view_state))
-    # st.write("Data Type:", type(df))
-    # st.write("Data Head:", df.head())
-    # Display the map
-    st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[layer],initial_view_state=view_state,tooltip={"text": "{station_id}\nTemp: {value} °C"}))
-
-
-
 # Plot the locations of the 5 stations on an interactive map
 fig = px.scatter_map(pl.DataFrame(conn.table("stations").select("*").execute().data), lat="Latitude",lon="Longitude",text="Native ID", color_discrete_sequence=['red'])
 st.plotly_chart(fig)
@@ -141,6 +98,38 @@ if st.button('Plot'):
     else:
         st.error("Pick a station.") # error if there is no station picked
 
+# Load token from Streamlit secrets
+MAPBOX_TOKEN = st.secrets["mapbox"]["token"]
+pdk.settings.mapbox_api_key = MAPBOX_TOKEN
+
+map_year = st.slider("Year to view",1995,2004,1995,1) # Select a year
+# Get min and max datetimes
+if map_year == 1995:
+    min_ts = datetime(map_year,11,13,11)
+    max_ts = datetime(map_year,12,31,23)    
+else:
+    min_ts = datetime(map_year,1,1)
+    max_ts = datetime(map_year,12,31,23)
+# Create slider
+selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,step=timedelta(hours=1),format="YYYY-MM-DD HH:mm:ss")
+
+df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).eq("record_ts",selected_time.isoformat()).execute().data)
+if df.is_empty():
+    st.error("No data for this date.")
+
+# Extract Latitude and Longitude from struct
+else:
+    df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
+    df = df.drop("stations")
+
+    # Create a pydeck map
+    df_pd = df.to_pandas()
+    layer = pdk.Layer("ScatterplotLayer",df_pd,get_position='[Longitude, Latitude]',get_color='[200, 30, 0, 160]',get_radius=1000,pickable=True)
+    # Set the viewport
+    view_state = pdk.ViewState(latitude=df_pd["Latitude"].mean(),longitude=df_pd["Longitude"].mean(),zoom=7,pitch=0)
+ 
+    # Display the map
+    st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[layer],initial_view_state=view_state,tooltip={"text": "{station_id}\nTemp: {value} °C"}))
 
 # Create and write section 4
 st.header("4. Some Analysis: Polynomial Regression of Air Temperature")
