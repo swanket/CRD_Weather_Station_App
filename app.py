@@ -36,8 +36,8 @@ else:
 # Create slider
 selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,format="YYYY-MM-DD HH:mm:ss")
 
-st.write(datetime(map_year,1,1))
-st.write(datetime(map_year,1,1).isoformat())
+# st.write(datetime(map_year,1,1))
+# st.write(datetime(map_year,1,1).isoformat())
 
 df = pl.DataFrame(conn.table("readings").select("station_id,record_ts,value,stations(Latitude,Longitude)").eq("variable_id",9).eq("record_ts",selected_time.isoformat()).execute().data)
 if df.is_empty():
@@ -49,15 +49,15 @@ else:
     df = df.with_columns([pl.col("stations").struct.field("Latitude").alias("Latitude"),pl.col("stations").struct.field("Longitude").alias("Longitude")])
     df = df.drop("stations")
 
-    df = df.with_columns(pl.col("record_ts").str.to_datetime().alias("record_ts"))
+    # df = df.with_columns(pl.col("record_ts").str.to_datetime().alias("record_ts"))
 
-    st.write(df)
+    # Create a pydeck map
+    layer = pdk.Layer("ScatterplotLayer",df,get_position='[Longitude, Latitude]',get_color='[200, 30, 0, 160]',get_radius=50000,pickable=True)
+    # Set the viewport
+    view_state = pdk.ViewState(latitude=df["latitude"].mean(),longitude=df["longitude"].mean(),zoom=3,pitch=0)
+    # Display the map
+    st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[layer],initial_view_state=view_state,tooltip={"text": "{station_name}\nTemp: {temperature} °C"}))
 
-# # Create slider
-# selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,format="YYYY-MM-DD HH:mm:ss")
-
-# Filter or display selection
-st.write("You selected:", selected_time)
 
 
 # Plot the locations of the 5 stations on an interactive map
