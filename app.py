@@ -54,7 +54,7 @@ else:
 
     # Create a pydeck map
     df_pd = df.to_pandas()
-    layer = pdk.Layer("ScatterplotLayer",df_pd,get_position='[Longitude, Latitude]',get_color='[200, 30, 0, 160]',get_radius=500,pickable=True)
+    layer = pdk.Layer("ScatterplotLayer",df_pd,get_position='[Longitude, Latitude]',get_color='[200, 30, 0, 160]',get_radius=1000,pickable=True)
     # Set the viewport
     view_state = pdk.ViewState(latitude=df_pd["Latitude"].mean(),longitude=df_pd["Longitude"].mean(),zoom=7,pitch=0)
     # st.write("ViewState Type:", type(view_state))
