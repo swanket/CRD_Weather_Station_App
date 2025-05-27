@@ -132,8 +132,25 @@ else:
     distinct_lat_lon = lat_lon_df.unique(subset=["Latitude","Longitude"])
     mean_lat = distinct_lat_lon["Latitude"].mean()
     mean_lon = distinct_lat_lon["Longitude"].mean()
-    st.write(mean_lat)
-    st.write(mean_lon)
+    radius = 20000
+    # Overpass query for towns
+    query = f"""[out:json];node(around:{radius},{mean_lat},{mean_lon})["place"~"town|city|village"];out center;"""
+    url = "http://overpass-api.de/api/interpreter"
+    response = requests.get(url, params={'data': query})
+
+    # Extract results cleanly into a Polars DataFrame
+    towns = [
+        {
+            "name": e.get("tags", {}).get("name", "Unnamed"),
+            "place_type": e.get("tags", {}).get("place", "unknown"),
+            "latitude": e["lat"],
+            "longitude": e["lon"]
+        }
+        for e in response.json().get("elements", [])
+    ]
+
+    towns_df = pl.DataFrame(towns)
+    st.write(towns_df)
 
     # Set the viewport
     view_state = pdk.ViewState(latitude=df_pd["Latitude"].mean(),longitude=df_pd["Longitude"].mean(),zoom=7,pitch=0)
