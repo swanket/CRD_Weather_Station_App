@@ -9,7 +9,7 @@ from datetime import datetime
 from datetime import timedelta
 import plotly.graph_objects as go
 import pydeck as pdk
-import json
+import requests
 
 
 # Connect to the Supabase database
@@ -112,6 +112,7 @@ if map_year == 1995:
 else:
     min_ts = datetime(map_year,1,1)
     max_ts = datetime(map_year,12,31,23)
+
 # Create slider
 selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,step=timedelta(hours=1),format="YYYY-MM-DD HH:mm:ss")
 
@@ -127,6 +128,10 @@ else:
     # Create a pydeck map
     df_pd = df.to_pandas()
     layer = pdk.Layer("ScatterplotLayer",df_pd,get_position='[Longitude, Latitude]',get_color='[200, 30, 0, 160]',get_radius=1000,pickable=True)
+    lat_lon_df = pl.DataFrame(conn.table("stations").select("Latitude,Longitude").execute().data)
+    distinct_lat_lon = lat_lon_df.unique(subset=["Latitude","Longitude"])
+    st.write(distinct_lat_lon)
+
     # Set the viewport
     view_state = pdk.ViewState(latitude=df_pd["Latitude"].mean(),longitude=df_pd["Longitude"].mean(),zoom=7,pitch=0)
  
