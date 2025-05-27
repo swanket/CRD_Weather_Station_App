@@ -6,6 +6,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 from st_supabase_connection import SupabaseConnection
 from datetime import datetime
+from datetime import timedelta
 import plotly.graph_objects as go
 import pydeck as pdk
 import json
@@ -35,7 +36,7 @@ else:
     min_ts = datetime(map_year,1,1)
     max_ts = datetime(map_year,12,31,23)
 # Create slider
-selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,format="YYYY-MM-DD HH:mm:ss")
+selected_time = st.slider("Select date and time:",min_value=min_ts,max_value=max_ts,value=min_ts,step=timedelta(hours=1),format="YYYY-MM-DD HH:mm:ss")
 
 # st.write(datetime(map_year,1,1))
 # st.write(datetime(map_year,1,1).isoformat())
