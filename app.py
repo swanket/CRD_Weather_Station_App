@@ -151,8 +151,8 @@ else:
     view_state = pdk.ViewState(latitude=df_pd["Latitude"].mean(),longitude=df_pd["Longitude"].mean(),zoom=7,pitch=0)
  
     # Display the map
-    # st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[stations_layer],initial_view_state=view_state,tooltip={"text": "{station_id}\nTemp: {value} °C"}))
-    st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[stations_layer,towns_layer],initial_view_state=view_state,tooltip={"html": """<b>{station_id}</b><br />Temp: {value}°C<br />POI: {name}<br />Type: {place_type}""","style": {"backgroundColor": "black", "color": "white"}}))
+    st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[stations_layer],initial_view_state=view_state,tooltip={"text": "{station_id}\nTemp: {value} °C"}))
+    # st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[stations_layer,towns_layer],initial_view_state=view_state,tooltip={"html": """<b>{station_id}</b><br />Temp: {value}°C<br />POI: {name}<br />Type: {place_type}""","style": {"backgroundColor": "black", "color": "white"}}))
 
 # Create and write section 4
 st.header("4. Some Analysis: Polynomial Regression of Air Temperature")
