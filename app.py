@@ -130,7 +130,10 @@ else:
     layer = pdk.Layer("ScatterplotLayer",df_pd,get_position='[Longitude, Latitude]',get_color='[200, 30, 0, 160]',get_radius=1000,pickable=True)
     lat_lon_df = pl.DataFrame(conn.table("stations").select("Latitude,Longitude").execute().data)
     distinct_lat_lon = lat_lon_df.unique(subset=["Latitude","Longitude"])
-    st.write(distinct_lat_lon)
+    mean_lat = distinct_lat_lon["Latitude"].mean()
+    mean_lon = distinct_lat_lon["Longitude"].mean()
+    st.write(mean_lat)
+    st.write(mean_lon)
 
     # Set the viewport
     view_state = pdk.ViewState(latitude=df_pd["Latitude"].mean(),longitude=df_pd["Longitude"].mean(),zoom=7,pitch=0)
