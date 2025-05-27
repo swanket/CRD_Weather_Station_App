@@ -55,8 +55,11 @@ else:
     layer = pdk.Layer("ScatterplotLayer",df,get_position='[Longitude, Latitude]',get_color='[200, 30, 0, 160]',get_radius=50000,pickable=True)
     # Set the viewport
     view_state = pdk.ViewState(latitude=float(df["Latitude"].mean()),longitude=float(df["Longitude"].mean()),zoom=3,pitch=0)
+    st.write("ViewState Type:", type(view_state))
+    st.write("Data Type:", type(df))
+    st.write("Data Head:", df.head())
     # Display the map
-    st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[layer],initial_view_state=view_state,tooltip={"text": "{station_name}\nTemp: {temperature} °C"}))
+    # st.pydeck_chart(pdk.Deck(map_style="mapbox://styles/mapbox/light-v10",layers=[layer],initial_view_state=view_state,tooltip={"text": "{station_name}\nTemp: {temperature} °C"}))
 
 
 
